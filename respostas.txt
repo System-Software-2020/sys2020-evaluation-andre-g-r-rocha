@@ -1,1 +1,26 @@
-1-
+1-Escreve "Hello" na tela.
+2-O ponto de entrada é a função _start.
+3-_start é o símbolo padrão que o linker procura como sendo o inicio do programa na perspectiva do OS.
+4-A seção .data é utilizada para reservar espaços na memória estática (stack), no programa tem a função de declarar e inicializar as variáveis p1 e p2.
+5-A função _start marca o início do código para o kernel e permite ao runtime fazer inicializações intermediárias antes de pular para a função main de fato.
+6-Essas linhas marcam o prólogo e o epílogo, que tem a função de salvar o estado da stack antes de iniciar a função, e restaurá-lo após o termino da mesma, respectivamente. A implementação destas é dependente da ABI sendo utilizada para que haja o correto alinhamento da stack, elas são adicionadas ao código pelo compilador.
+7-O compilador pode escolher não utilizar o prólogo e o epílogo, se a função for uníca isso não será um problema, entretanto, se houver alguma chamada a outra função dentro da função principal, o programa não consegue retornar à função principal após o término da função chamada.
+8-O exercício usa a convenção de chamadas x86 cdecl.
+9-Existe um bug na linha 29, onde a função main não limpa todos os valores que passou para a função write.
+10-A linha 29 deve ser reescrita como: add esp, 12
+11-A função write não obedece totalmente a ABI x86 pois utiliza o registrador preservado ebx e o reescreve sem salvá-lo antes.
+12-#include <stdio.h>
+
+void write(const char*);
+
+const char* p1 = "Hello";
+
+int main(){
+	write(p1);
+	return(0);
+}
+
+void write(const char* p1){
+	printf("%s\n", p1);
+}
+13-
