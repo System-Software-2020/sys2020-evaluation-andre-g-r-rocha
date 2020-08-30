@@ -9,18 +9,16 @@
 9-Existe um bug na linha 29, onde a função main não limpa todos os valores que passou para a função write.
 10-A linha 29 deve ser reescrita como: add esp, 12
 11-A função write não obedece totalmente a ABI x86 pois utiliza o registrador preservado ebx e o reescreve sem salvá-lo antes.
-12-#include <stdio.h>
+12-#include <unistd.h>
 
-void write(const char*);
-
-const char* p1 = "Hello";
+const char* p1 = "Hello\n";
 
 int main(){
-	write(p1);
+	write(1, p1, 6);
 	return(0);
 }
-
-void write(const char* p1){
-	printf("%s\n", p1);
-}
-13-
+13-O binário ex1-asm é do tipo EXEC, enquanto o binário ex1-c é do tipo DYN, isso porque o arquivo ex1-asm é um binário estático e foi linkado estaticamente, já o arquivo ex1-c é um objeto compartilhado que foi linkado dinamicamente.
+14-A função main chama o endereço 80480ab no arquivo ex1-asm.
+15-A função main chama o endereço 55c no arquivo ex1-c, que é o endereço seguinte ao da chamada em si, isso porque o arquivo ex1-c foi linkado dinamicamente e só terá o endereço correto durante a execução do programa.
+16-Neste caso, a função main chama o endereço 3d0, pois a flag -fpic transforma o código em position-independent code, logo, não sabemos em qual endereço de memória o código da main estará e a chamada para o endereço 3d0 aponta para a seção PLT, que fará a chamada à função write no futuro.
+17-A vantagem do PIC é que este pode ser alocado e executado com posições de memória relativas e permite uma melhor alocação da memória, pois pode ser deslocado, mas exige mais da CPU para traduzir as posições de memória relativas, códigos não PIC possum posições de memória absolutas e não podem ter suas posições de memória modificadas, mas exigem menos jumps e traduções de posições de memória.
