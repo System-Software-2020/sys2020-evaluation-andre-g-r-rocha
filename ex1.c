@@ -1,8 +1,8 @@
-#include <unistd.h>
+#include "libex2.h"
 
-const char* p1 = "Hello\n";
+char* p1 = "Hello\n";
 
 int main(){
-	write(1, p1, 6);
+	new_write(p1);
 	return(0);
 }
