@@ -20,26 +20,28 @@ _start:
         int 0x80                
 
 main:
-        push ebp                
+        push ebp
         mov ebp, esp
+        push ebx
         push 6                 
         push p1
         push 1
         call write
-        add esp, 8
-        mov eax, 0              
-        mov esp, ebp            
+        add esp, 12
+        mov eax, 0
+        pop ebx
+        mov esp, ebp
         pop ebp
         ret                  
 
 write:
-        push ebp                
+        push ebp               
         mov ebp, esp
         mov ebx, [esp+8]                 
         mov ecx, [esp+12]                 
         mov edx, [esp+16]                 
         mov eax, 4              
-        int 0x80                
+        int 0x80            
         mov esp, ebp            
         pop ebp
         ret
